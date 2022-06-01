@@ -1,0 +1,28 @@
+{
+  "name": "request-bin",
+  "version": "1.0.0",
+  "description": "practice project for request bin by JJAM",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alovegren/request-bin.git"
+  },
+  "author": "Jessica Chang, Missy Lovegren, Andrew Moore, Julia Shi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alovegren/request-bin/issues"
+  },
+  "homepage": "https://github.com/alovegren/request-bin#readme",
+  "dependencies": {
+    "express": "^4.18.1",
+    "handlebars": "^4.7.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
