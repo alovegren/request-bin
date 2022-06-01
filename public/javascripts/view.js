@@ -4,6 +4,11 @@ class View {
     this.#createNav();
   }
 
+  onNewEndpointClick(endpointObj) {
+    const template = templates.endpointTemplate(endpointObj);
+    document.body.insertAdjacentHTML('afterbegin', template);
+  }
+
   #createTemplates() {
     this.templates = {};
 
@@ -28,4 +33,4 @@ class View {
   }
 }
 
-export default View
+export default View;

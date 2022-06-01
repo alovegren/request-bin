@@ -10,7 +10,24 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
   </head>
   <body>
-    
+    <script type="text/x-handlebars" id="endpointTemplate">
+      <main>
+        <div id="endpoint">
+          <h4>Your Bin</h4>
+          <p>
+            <h5>{{url}}</h5>
+            <ul>
+              <li>Supported: DNS, HTTP</li>
+              <li>Created: {{created}}</li>
+              <li>Last: {{lastRequest}}</li>
+              <li>Count: {{requests.length}}</li>
+              <li>Active: {{active}}</li>
+            </ul>
+          </p>
+        </div>
+      </main>
+    </script>
+
     <script type="module" src="./javascripts/app.js"></script>
   </body>
 </html>
