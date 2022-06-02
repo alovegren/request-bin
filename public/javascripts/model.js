@@ -1,8 +1,6 @@
 class Model {
   addEndpoint() {
-    // generate UUID
-    // hash UUID into a random string
-      
+    // tell postgres to 
   }
 }
 
