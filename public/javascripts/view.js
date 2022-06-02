@@ -6,7 +6,7 @@ class View {
 
   onNewEndpointClick(endpointObj) {
     const template = templates.endpointTemplate(endpointObj);
-    document.body.insertAdjacentHTML('afterbegin', template);
+    document.body.insertAdjacentHTML('beforeend', template);
   }
 
   #createTemplates() {
