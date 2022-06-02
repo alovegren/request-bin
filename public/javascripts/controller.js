@@ -1,11 +1,13 @@
 class Controller {
   async addEndpoint() {
+    console.log("telling the model to create a new endpoint...");
     const endpoint = await this.model.addEndpoint();
     this.view.onNewEndpointClick(endpoint);
   }
 
   #bindEvents() {
     const newBinBtn = document.getElementById('newBinBtn');
+    console.log(newBinBtn);
     newBinBtn.onclick = this.addEndpoint.bind(this);
   }
   

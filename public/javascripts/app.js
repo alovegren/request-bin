@@ -1,8 +1,12 @@
 import View from "./view.js";
+import Model from "./model.js";
+import Controller from "./controller.js";
 
 let App = {
   init() {
-    this.view = new View()
+    this.model = new Model();
+    this.view = new View();
+    this.controller = new Controller(this.model, this.view);
     return this;
   }
 }

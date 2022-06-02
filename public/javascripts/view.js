@@ -20,7 +20,7 @@ class View {
 
   #createNav() {
     let addHtml = this.templates.navTemplate()
-    document.body.insertAdjacentHTML('beforeend', addHtml)
+    document.body.insertAdjacentHTML('afterbegin', addHtml)
     var els = document.querySelectorAll('.speak');
     [].forEach.call(els, function(el) {
       el.addEventListener('click', function() {
