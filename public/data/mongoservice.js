@@ -19,7 +19,7 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1
 });
 
-async function addRequestEntry({ requestMethod, requestIp, headers, payload, endpointURL }) {
+async function addRequestEntry({ requestMethod, requestIp, headers, payload, endpointID }) {
   let newRequestEntry;
 
   try {
@@ -33,7 +33,7 @@ async function addRequestEntry({ requestMethod, requestIp, headers, payload, end
       requestIp,
       headers,
       payload,
-      endpointURL,
+      endpointID,
     });
 
   } catch (error) {
