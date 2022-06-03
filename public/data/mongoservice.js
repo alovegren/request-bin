@@ -3,7 +3,13 @@
 // const findConfig = require('find-config');
 // const dotenvPath = findConfig('.env');
 // require('dotenv').config({ path: dotenvPath });
+
 import { MongoClient, ServerApiVersion } from 'mongodb';
+
+const MONGODB_USER = 'potatobinJJAM_user';
+const MONGODB_PASSWORD = 'm7r9aZitZYnM80vV';
+const MONGODB_DB_NAME = 'potatoBin';
+const MONGODB_COLLECTION_NAME = 'requestEntries';
 
 const uri = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@potatobin.z4lmi4p.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -55,6 +61,6 @@ const endpointURL = 'scoobityJJAM';
 
 const addRequestEntryArgs = {headers, payload, endpointURL};
 
-(async () => console.log(await addRequestEntry(addRequestEntryArgs)))();
+// (async () => console.log(await addRequestEntry(addRequestEntryArgs)))();
 
 export { addRequestEntry };

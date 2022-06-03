@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import  from 'javascripts/mongodb.js';
+import { addRequestEntry } from './public/data/mongoservice.js';
 
 const app = express();
 
@@ -26,10 +26,18 @@ app.get('/:endpoint', (req, res) => {
 });
 
 // POST requests sent to endpoint
-app.post('/:bin_id', (req, res) => {
-  const binId = req.params.bin_id;
-  // controller.addRequest(binId, req.body, req.headers, req.method);
-  res.send(`${controller}`);
+app.post('/:bin_id', async (req, res) => {
+  const endpointURL = req.params.bin_id;
+
+  const mongoId = await addRequestEntry({
+    requestMethod: req.method,
+    requestIp: req.ip,
+    headers: req.headers,
+    payload: req.body,
+    endpointURL, 
+  });
+
+  res.send(`${mongoId}`);
 });
 
 app.listen(app.get('port'), () => {
