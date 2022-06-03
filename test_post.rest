@@ -1,0 +1,7 @@
+POST http://localhost:3000/anendpoint
+content-type: application/json
+
+{
+  "field": "sample",
+  "time": "kittens"
+}

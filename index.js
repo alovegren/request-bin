@@ -1,8 +1,13 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
+import express from 'express';
+import bodyParser from 'body-parser';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { addRequestEntry } from './public/data/mongoservice.js';
 
 const app = express();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 app.set('port', 3000);
 app.use('/', express.static(path.join(__dirname, 'public')));
@@ -18,10 +23,25 @@ app.get('/', (req, res) => {
 //Route for specific endpoint
 app.get('/:endpoint', (req, res) => {
   res.sendFile(publicPath + '/endpoint.html')
-})
+});
+
+// POST requests sent to endpoint
+app.post('/:bin_id', async (req, res) => {
+  const endpointID = req.params.bin_id;
+
+  const mongoId = await addRequestEntry({
+    requestMethod: req.method,
+    requestIp: req.ip,
+    headers: req.headers,
+    payload: req.body,
+    endpointID, 
+  });
+
+  res.send(`${mongoId}`);
+});
 
 app.listen(app.get('port'), () => {
   console.log(`Find the server at: http://localhost:${app.get('port')}/`);
 });
 
-module.exports = app;
+export default app;
