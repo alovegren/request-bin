@@ -9,6 +9,15 @@ class Controller {
     this.#view.onNewEndpointClick(endpoint);
   }
 
+  addRequest(binId, requestBody, requestHeaders) {
+    console.log("I got a post request!");
+    // console.log("binId I got was", binId);
+    // console.log("requestBody I got was", requestBody);
+    // console.log("requestHeaders I got was", requestHeaders);
+    this.#model.addNewRequest(binId, requestBody, requestHeaders);
+    // we could tell view to add another request here
+  }
+
   #bindIndexEvents() {
     if (document.getElementById('index')) {
       const newBinBtn = document.getElementById('newBinBtn');
