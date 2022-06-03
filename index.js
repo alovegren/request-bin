@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { addRequestEntry } from './public/data/mongoservice.js';
+import dbService from './data/services/dbService.js';
 
 const app = express();
 
@@ -15,21 +15,40 @@ const publicPath = path.join(__dirname, 'public/html')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// apis
+app.get('/api/endpoints/:endpoint_id/requests', (req, res) => {
+  try {
+    const requests = await dbService.getRequestEntriesByEndpointID(endpoint_id);
+    res.status(200).send(requests);
+  } catch (error) {
+    res.status(503).json({ error });
+  }
+});
+
+app.post('/api/endpoints', (req, res) => {
+  try {
+    const endpointId = await dbService.createEndpoint();
+    res.status(201).json({ endpointId });
+  } catch (error) {
+    res.status(503).json({ error });
+  }
+});
+
 // Route for the main page
 app.get('/', (req, res) => {
-  res.sendFile(publicPath + '/index.html')
+  res.sendFile(publicPath + '/index.html');
 });
 
 //Route for specific endpoint
 app.get('/:endpoint', (req, res) => {
-  res.sendFile(publicPath + '/endpoint.html')
+  res.sendFile(publicPath + '/endpoint.html');
 });
 
 // POST requests sent to endpoint
 app.post('/:bin_id', async (req, res) => {
   const endpointID = req.params.bin_id;
 
-  const mongoId = await addRequestEntry({
+  const requestDocumentId = await addRequestEntry({
     requestMethod: req.method,
     requestIp: req.ip,
     headers: req.headers,
@@ -37,7 +56,9 @@ app.post('/:bin_id', async (req, res) => {
     endpointID, 
   });
 
-  res.send(`${mongoId}`);
+  console.log(`request document with an id of ${requestDocumentId} has been added`);
+
+  res.status(200).send('Request received');
 });
 
 app.listen(app.get('port'), () => {
