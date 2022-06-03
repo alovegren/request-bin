@@ -27,14 +27,14 @@ app.get('/:endpoint', (req, res) => {
 
 // POST requests sent to endpoint
 app.post('/:bin_id', async (req, res) => {
-  const endpointURL = req.params.bin_id;
+  const endpointID = req.params.bin_id;
 
   const mongoId = await addRequestEntry({
     requestMethod: req.method,
     requestIp: req.ip,
     headers: req.headers,
     payload: req.body,
-    endpointURL, 
+    endpointID, 
   });
 
   res.send(`${mongoId}`);

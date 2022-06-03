@@ -6,10 +6,7 @@
 
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
-const MONGODB_USER = 'potatobinJJAM_user';
-const MONGODB_PASSWORD = 'm7r9aZitZYnM80vV';
-const MONGODB_DB_NAME = 'potatoBin';
-const MONGODB_COLLECTION_NAME = 'requestEntries';
+// configuration info goes here
 
 const uri = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@potatobin.z4lmi4p.mongodb.net/?retryWrites=true&w=majority`;
 
