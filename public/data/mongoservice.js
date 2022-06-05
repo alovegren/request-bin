@@ -16,7 +16,7 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1
 });
 
-async function addRequestEntry({ requestMethod, requestIp, headers, payload, endpointID }) {
+async function addRequestEntry({ requestMethod, requestIp, headers, payload, endpointId }) {
   let newRequestEntry;
 
   try {
@@ -30,7 +30,7 @@ async function addRequestEntry({ requestMethod, requestIp, headers, payload, end
       requestIp,
       headers,
       payload,
-      endpointID,
+      endpointId,
     });
 
   } catch (error) {
@@ -42,7 +42,7 @@ async function addRequestEntry({ requestMethod, requestIp, headers, payload, end
   }
 }
 
-async function getRequestEntriesByEndpointID(id) {
+async function getRequestEntriesByEndpointId(id) {
   let matchingRequestEntries;
 
   try {
@@ -52,7 +52,7 @@ async function getRequestEntriesByEndpointID(id) {
     const requestEntries = db.collection(`${MONGODB_COLLECTION_NAME}`);
 
     const matchingRequestEntriesCursor = await requestEntries.find({
-      endpointID: id,
+      endpointId: id,
     });
 
     matchingRequestEntries = await matchingRequestEntriesCursor.toArray();
@@ -65,4 +65,4 @@ async function getRequestEntriesByEndpointID(id) {
   }
 }
 
-export { addRequestEntry, getRequestEntriesByEndpointID };
+export { addRequestEntry, getRequestEntriesByEndpointId };
