@@ -2,7 +2,6 @@ import { addNewEndpoint, updateEndpoint, getEndpointInfo } from '../data/postgre
 import { addRequestEntry, getRequestEntriesByEndpointId } from '../data/mongoservice.js';
 
 // use cases
-// post to a potatoBin
 // make new potatoBin
 // retrieve all requests for potatoBin
 
@@ -23,7 +22,16 @@ async function addRequest(requestInfo) {
 }
 
 async function createBin() {
+  let newBinPath;
 
+  try {
+    newBinPath = await addNewEndpoint();
+  } catch (err) {
+    console.log('error creating bin: ', err);
+    return {createBinFailed: true};
+  }
+
+  return newBinPath;
 }
 
 async function getBinRequests(binPath) {
