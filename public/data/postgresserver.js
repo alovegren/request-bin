@@ -17,6 +17,9 @@ const pool = new Pool({
   host: 'localhost',
 });
 
+// const tableName = process.env.POSTGRES_TABLE_NAME;
+// console.log('tableName', tableName);
+
 // if testing mode, create endpoint table if does not exist yet and insert data
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const schema = fs.readFileSync(path.join(__dirname, 'pgSchema.sql')).toString();
@@ -62,6 +65,11 @@ const addNewEndpoint = async () => {
 // Update count and last requested timestamp in table when new request has been made to specific url endpoint
 const updateEndpoint = async (binPath) => {
   let count = await pool.query(`SELECT count FROM endpointTest WHERE link = $1;`, [binPath]);
+
+  if (count.rowCount === 0) {
+    return {binNotFound: true};
+  }
+
   count = count.rows[0].count;
 
   await pool.query(`UPDATE endpointTest SET count = $1, last_request_at = NOW() WHERE link = $2;`, [count + 1, binPath]);
@@ -76,7 +84,7 @@ const getEndpointInfo = async (binPath) => {
   const endpointInfo = await pool.query(`SELECT * FROM endpointTest WHERE link = $1;`, [binPath]);
 
   if (endpointInfo.rowCount === 0) {
-    return {};
+    return {binNotFound: true};
   } else {
     return endpointInfo.rows[0];
   }

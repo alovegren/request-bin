@@ -29,7 +29,7 @@ async function addRequestEntry({ requestMethod, requestIp, headers, payload, end
 
   } catch (error) {
     console.log('error adding requestEntry!', error);
-    throw error;
+    return {addRequestEntryFailed: true};
   } finally {
     await client.close();
     return newRequestEntry.insertedId.valueOf().toString();
@@ -52,7 +52,7 @@ async function getRequestEntriesByEndpointId(id) {
     matchingRequestEntries = await matchingRequestEntriesCursor.toArray();
   } catch (error) {
     console.log('error getting requestEntriesById! ', error);
-    throw error;
+    return { getRequestEntriesByEndpointIdFailed: true};
   } finally {
     await client.close();
     return matchingRequestEntries;

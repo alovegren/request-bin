@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { addRequestEntry } from './public/data/mongoservice.js';
+import { addRequest } from './public/services/dbService.js';
 
 const app = express();
 
@@ -27,17 +27,23 @@ app.get('/:endpoint', (req, res) => {
 
 // POST requests sent to endpoint
 app.post('/:bin_id', async (req, res) => {
-  const endpointID = req.params.bin_id;
+  const endpointId = req.params.bin_id;
 
-  const mongoId = await addRequestEntry({
+  const addedRequest = await addRequest({
     requestMethod: req.method,
     requestIp: req.ip,
     headers: req.headers,
     payload: req.body,
-    endpointID, 
+    endpointId,
   });
 
-  res.send(`${mongoId}`);
+  if (addedRequest.binNotFound) {
+    res.sendStatus(404);
+  } else if (addedRequest.addRequestFailed) {
+    res.sendStatus(500);
+  } else {
+    res.sendStatus(200);
+  }
 });
 
 app.listen(app.get('port'), () => {
