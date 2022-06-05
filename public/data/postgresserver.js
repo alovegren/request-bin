@@ -70,4 +70,16 @@ const updateEndpoint = async (binPath) => {
   return res.rows[0];
 }
 
-export { addNewEndpoint, updateEndpoint };
+// Retrieve information for the endpoint corresponding to the binPath it's given
+// Returns an object with the relevant info, or an empty object if no matching data is found
+const getEndpointInfo = async (binPath) => {
+  const endpointInfo = await pool.query(`SELECT * FROM endpointTest WHERE link = $1;`, [binPath]);
+
+  if (endpointInfo.rowCount === 0) {
+    return {};
+  } else {
+    return endpointInfo.rows[0];
+  }
+}
+
+export { addNewEndpoint, updateEndpoint, getEndpointInfo };
