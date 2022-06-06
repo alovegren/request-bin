@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import dbService from './data/services/dbService.js';
+import dbService from './public/services/dbService.js';
 
 const app = express();
 
@@ -18,17 +18,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 // apis
-// app.get('/api/endpoints/:endpoint_id', async (req, res) => {
-//   try {
-//     // const details = await dbService.getEndpointDetails(
-//     //   req.params.endpoint_id
-//     // );
+app.get('/api/endpoints/:endpoint_id', async (req, res) => {
+  try {
+    const details = await dbService.getEndpointDetails(
+      req.params.endpoint_id
+    );
 
-//     res.status(200).send(details);
-//   } catch (error) {
-//     res.status(404).json({ error });
-//   }
-// });
+    res.status(200).send(details);
+  } catch (error) {
+    res.status(404).json({ error });
+  }
+});
 
 app.get('/api/endpoints/:endpoint_id/requests', async (req, res) => {
   try {

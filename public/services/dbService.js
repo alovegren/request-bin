@@ -15,7 +15,7 @@ async function addRequest(requestInfo) {
   const addEntryResponse = await addRequestEntry(requestInfo);
 
   if (addEntryResponse.addRequestEntryFailed) {
-    return {addRequestFailed: true};
+    return { addRequestFailed: true };
   } else {
     return addEntryResponse;
   }
@@ -28,14 +28,30 @@ async function createBin() {
     newBinPath = await addNewEndpoint();
   } catch (err) {
     console.log('error creating bin: ', err);
-    return {createBinFailed: true};
+    return { createBinFailed: true };
   }
 
   return newBinPath;
 }
 
 async function getBinRequests(binPath) {
+  const requests = await getRequestEntriesByEndpointId(binPath);
 
+  if (requests.getRequestEntriesByEndpointIdFailed) {
+    return { getRequestsFailed: true }
+  } else {
+    return requests;
+  }
 }
 
-export { addRequest, createBin, getBinRequests };
+async function getEndpointDetails(binPath) {
+  const endpointDetails = await getEndpointInfo(binPath);
+
+  if (endpointDetails.binNotFound) {
+    return { binNotFound: true }
+  } else {
+    return endpointDetails;
+  }
+}
+
+export default { addRequest, createBin, getBinRequests, getEndpointDetails };

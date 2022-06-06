@@ -49,6 +49,8 @@ async function getRequestEntriesByEndpointId(id) {
       endpointId: id,
     });
 
+    // execution does not make it to this line
+
     matchingRequestEntries = await matchingRequestEntriesCursor.toArray();
   } catch (error) {
     console.log('error getting requestEntriesById! ', error);
