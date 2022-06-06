@@ -1,14 +1,8 @@
-// require('dotenv').config();
-// console.log(require('dotenv').config({ path: '../../.env' }));
-// const findConfig = require('find-config');
-// const dotenvPath = findConfig('.env');
-// require('dotenv').config({ path: dotenvPath });
-
+import dotenv from 'dotenv';
+dotenv.config();
 import { MongoClient, ServerApiVersion } from 'mongodb';
 
-// configuration info goes here
-
-const uri = `mongodb+srv://${MONGODB_USER}:${MONGODB_PASSWORD}@potatobin.z4lmi4p.mongodb.net/?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@potatobin.z4lmi4p.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
@@ -16,53 +10,53 @@ const client = new MongoClient(uri, {
   serverApi: ServerApiVersion.v1
 });
 
-async function addRequestEntry({ requestMethod, requestIp, headers, payload, endpointID }) {
+async function addRequestEntry({ requestMethod, requestIp, headers, payload, endpointId }) {
   let newRequestEntry;
 
   try {
     await client.connect();
 
-    const db = client.db(`${MONGODB_DB_NAME}`);
-    const requestEntries = db.collection(`${MONGODB_COLLECTION_NAME}`);
+    const db = client.db(`${process.env.MONGODB_DB_NAME}`);
+    const requestEntries = db.collection(`${process.env.MONGODB_COLLECTION_NAME}`);
 
     newRequestEntry = await requestEntries.insertOne({
       requestMethod,
       requestIp,
       headers,
       payload,
-      endpointID,
+      endpointId,
     });
 
   } catch (error) {
     console.log('error adding requestEntry!', error);
-    throw error;
+    return {addRequestEntryFailed: true};
   } finally {
     await client.close();
     return newRequestEntry.insertedId.valueOf().toString();
   }
 }
 
-async function getRequestEntriesByEndpointID(id) {
+async function getRequestEntriesByEndpointId(id) {
   let matchingRequestEntries;
 
   try {
     await client.connect();
 
-    const db = client.db(`${MONGODB_DB_NAME}`);
-    const requestEntries = db.collection(`${MONGODB_COLLECTION_NAME}`);
+    const db = client.db(`${process.env.MONGODB_DB_NAME}`);
+    const requestEntries = db.collection(`${process.env.MONGODB_COLLECTION_NAME}`);
 
     const matchingRequestEntriesCursor = await requestEntries.find({
-      endpointID: id,
+      endpointId: id,
     });
 
     matchingRequestEntries = await matchingRequestEntriesCursor.toArray();
   } catch (error) {
     console.log('error getting requestEntriesById! ', error);
-    throw error;
+    return { getRequestEntriesByEndpointIdFailed: true};
   } finally {
     await client.close();
     return matchingRequestEntries;
   }
 }
 
-export { addRequestEntry, getRequestEntriesByEndpointID };
+export { addRequestEntry, getRequestEntriesByEndpointId };
