@@ -54,19 +54,23 @@ app.post('/api/endpoints', async (req, res) => {
 
 // POST requests sent to endpoint
 app.post('/:bin_id', async (req, res) => {
-  const endpointID = req.params.bin_id;
+  const endpointId = req.params.bin_id;
 
-  const requestDocumentId = await dbService.addRequest({
+  const addedRequest = await addRequest({
     requestMethod: req.method,
     requestIp: req.ip,
     headers: req.headers,
     payload: req.body,
-    endpointID, 
+    endpointId,
   });
 
-  console.log(`request document with an id of ${requestDocumentId} has been added`);
-
-  res.status(200).send('Request received');
+  if (addedRequest.binNotFound) {
+    res.sendStatus(404);
+  } else if (addedRequest.addRequestFailed) {
+    res.sendStatus(500);
+  } else {
+    res.sendStatus(200);
+  }
 });
 
 app.listen(app.get('port'), () => {
