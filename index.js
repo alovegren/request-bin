@@ -3,16 +3,14 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-// import dbService from './data/services/dbService.js';
-import { addRequestEntry, getRequestEntriesByEndpointId } from './public/data/mongoservice.js';
-import { addNewEndpoint, updateEndpoint } from './public/data/postgresserver.js';
+import dbService from './data/services/dbService.js';
 
 const app = express();
 
 // const __filename = fileURLToPath(import.meta.url);
 // const __dirname = path.dirname(__filename);
 
-app.set('port', 3001);
+app.set('port', 3008);
 // app.use('/', express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
@@ -26,8 +24,6 @@ app.use(cors());
 //     //   req.params.endpoint_id
 //     // );
 
-//     const details = await
-
 //     res.status(200).send(details);
 //   } catch (error) {
 //     res.status(404).json({ error });
@@ -36,11 +32,7 @@ app.use(cors());
 
 app.get('/api/endpoints/:endpoint_id/requests', async (req, res) => {
   try {
-    // const requests = await dbService.getRequestEntriesByEndpointID(
-    //   req.params.endpoint_id
-    // );
-
-    const requests = await getRequestEntriesByEndpointId(
+    const requests = await dbService.getBinRequests(
       req.params.endpoint_id
     );
 
@@ -53,8 +45,7 @@ app.get('/api/endpoints/:endpoint_id/requests', async (req, res) => {
 // POST requests for new endpoints
 app.post('/api/endpoints', async (req, res) => {
   try {
-    // const endpointId = await dbService.createEndpoint();
-    const endpointId = await addNewEndpoint();
+    const endpointId = await dbService.createBin();
     res.status(201).json({ endpointId });
   } catch (error) {
     res.status(503).json({ error });
@@ -65,7 +56,7 @@ app.post('/api/endpoints', async (req, res) => {
 app.post('/:bin_id', async (req, res) => {
   const endpointID = req.params.bin_id;
 
-  const requestDocumentId = await addRequestEntry({
+  const requestDocumentId = await dbService.addRequest({
     requestMethod: req.method,
     requestIp: req.ip,
     headers: req.headers,
